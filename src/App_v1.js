@@ -6,7 +6,6 @@ import styled from 'styled-components';
 import Header from './Header';
 import ListItem from './ListItem';
 import { wait } from './helpers';
-import Details from './Details';
 
 const Main = styled.main`
   display: flex;
@@ -14,12 +13,10 @@ const Main = styled.main`
 
 const List = styled.div`
   flex: 1;
-  //overflow-y: scroll;
-  //height: 400px;
 `;
 
-function useFetchPirates(initialState) {
-  const [pirates, setPirates] = useState(initialState);
+function useFetchPirates() {
+  const [pirates, setPirates] = useState([]);
 
   useEffect(() => {
     fetch('/pirates.csv')
@@ -28,7 +25,7 @@ function useFetchPirates(initialState) {
         let parsed = parse(r, { delimiter: ';' });
 
         // convert array to object
-        parsed = parsed.map(([id, name, life, active, country, desc]) => ({
+        parsed = parsed.map(([id, name, active, life, country, desc]) => ({
           id, name, active, life, country, desc
         }));
 
@@ -40,10 +37,9 @@ function useFetchPirates(initialState) {
 }
 
 function getCountries(pirates) {
-  // Simulate large dataset
-  wait(50);
-
   const uniqueCountries = compact(uniq(pirates.map(p => p.country)).sort());
+
+  wait(100);
 
   return uniqueCountries.map(country => ({
     name: country,
@@ -52,9 +48,6 @@ function getCountries(pirates) {
 }
 
 function getYearsOfLife(pirates) {
-  // Simulate large dataset
-  wait(50);
-
   const years = compact(pirates.map(p => {
     const match = p.life.match(/(\d{4})s?–(\d{4})s?/);
 
@@ -74,10 +67,9 @@ function getYearsOfLife(pirates) {
 }
 
 function App() {
-  const [pirates, setPirates] = useFetchPirates([]);
+  const [pirates, setPirates] = useFetchPirates();
 
   const [selectedPirate, setSelectedPirate] = useState();
-  const [selectedCountry, setSelectedCountry] = useState();
   const [selectedYears, setSelectedYears] = useState([]);
   const [search, setSearch] = useState('');
 
@@ -88,24 +80,14 @@ function App() {
     setSelectedPirate(pirateId);
   }, []);
 
-  let filteredPirates = pirates;
-
-  if (search) {
-    filteredPirates = filteredPirates.filter(p => p.name.toLowerCase().includes(search));
-  }
-
-  if (selectedCountry) {
-    filteredPirates = filteredPirates.filter(p => p.country === selectedCountry);
-  }
+  let filteredPirates = pirates.filter(p => p.name.toLowerCase().includes(search));
 
   return <>
     <Header
       countries={countries}
-      selectedCountry={selectedCountry}
-      onCountryChange={setSelectedCountry}
+      years={years}
       search={search}
       onSearchChange={setSearch}
-      years={years}
       onYearsChange={setSelectedYears}
     />
 
@@ -119,7 +101,7 @@ function App() {
           />
         ))}
       </List>
-      {selectedPirate && <Details {...pirates.find(p => p.id === selectedPirate)}/>}
+      {selectedPirate && <div>{selectedPirate}</div>}
     </Main>
   </>;
 }
