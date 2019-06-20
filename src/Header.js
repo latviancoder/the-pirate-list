@@ -5,9 +5,12 @@ import styled from 'styled-components';
 import 'rc-slider/assets/index.css';
 
 const Container = styled.div`
+  height: 10vh;
   display: flex;
   align-items: center;
   justify-content: space-around;
+  margin-left: -30px;
+  margin-right: -15px;
   & > * {
     margin-left: 30px;
     margin-right: 30px;
@@ -19,7 +22,7 @@ function handle(props) {
   return <Handle value={value} {...restProps} />;
 }
 
-export default function Header({ countries, years, search, onSearchChange, onYearsChange, onCountryChange, selectedCountry }) {
+export default function Header({ countries, search, onSearchChange, onCountryChange, selectedCountry }) {
   return <Container>
     <input
       type="text"
@@ -34,13 +37,13 @@ export default function Header({ countries, years, search, onSearchChange, onYea
       ))}
     </select>
 
-    {years && <Range
-      min={years.min}
-      max={years.max}
-      defaultValue={[years.min, years.max]}
-      marks={{ [years.min]: years.min, [years.max]: years.max }}
-      handle={handle}
-      onAfterChange={onYearsChange}
-    />}
+    {/*{years && <Range*/}
+    {/*  min={years.min}*/}
+    {/*  max={years.max}*/}
+    {/*  defaultValue={[years.min, years.max]}*/}
+    {/*  marks={{ [years.min]: years.min, [years.max]: years.max }}*/}
+    {/*  handle={handle}*/}
+    {/*  onAfterChange={onYearsChange}*/}
+    {/*/>}*/}
   </Container>;
 }

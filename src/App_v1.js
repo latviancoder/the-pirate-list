@@ -5,7 +5,8 @@ import styled from 'styled-components';
 
 import Header from './Header';
 import ListItem from './ListItem';
-import { wait } from './helpers';
+import { wait } from './stuff';
+import Footer from './Chart';
 
 const Main = styled.main`
   display: flex;
@@ -103,6 +104,8 @@ function App() {
       </List>
       {selectedPirate && <div>{selectedPirate}</div>}
     </Main>
+
+    <Footer/>
   </>;
 }
 

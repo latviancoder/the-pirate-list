@@ -1,92 +1,59 @@
-import React, { useCallback, useEffect, useState } from 'react';
-import parse from 'csv-parse/lib/sync';
-import { sortBy, uniq, compact, minBy, maxBy } from 'lodash';
-import styled from 'styled-components';
+import React, { createContext, useCallback, useContext, useState } from 'react';
+import styled, { createGlobalStyle } from 'styled-components';
 
 import Header from './Header';
 import ListItem from './ListItem';
-import { wait } from './helpers';
+import { Box, generateChartData, getCountries, getYearsOfLife, useFetchPirates } from './stuff';
 import Details from './Details';
+import Chart from './Chart';
+
+const GlobalStyle = createGlobalStyle`
+  body {
+    font-family: 'Muli', sans-serif;
+    font-size: 22px;
+    color: #525f7f; 
+    background-color: #F5F8FC;
+  }
+  * {
+    outline: none;
+  }
+`;
 
 const Main = styled.main`
   display: flex;
+  align-items: flex-start;
+  max-width: 1000px;
+  margin: 0 auto;
 `;
 
-const List = styled.div`
+const List = styled(Box)`
   flex: 1;
-  //overflow-y: scroll;
-  //height: 400px;
+  height: 60vh;
+  overflow-y: scroll;
 `;
 
-function useFetchPirates(initialState) {
-  const [pirates, setPirates] = useState(initialState);
+const Container = styled.div`
+  max-width: 1000px;
+  min-height: 100vh;
+  margin: 0 auto;
+`;
 
-  useEffect(() => {
-    fetch('/pirates.csv')
-      .then(r => r.text())
-      .then(r => {
-        let parsed = parse(r, { delimiter: ';' });
-
-        // convert array to object
-        parsed = parsed.map(([id, name, life, active, country, desc]) => ({
-          id, name, active, life, country, desc
-        }));
-
-        setPirates(sortBy(parsed, p => p.name));
-      });
-  }, []);
-
-  return [pirates, setPirates];
-}
-
-function getCountries(pirates) {
-  // Simulate large dataset
-  wait(50);
-
-  const uniqueCountries = compact(uniq(pirates.map(p => p.country)).sort());
-
-  return uniqueCountries.map(country => ({
-    name: country,
-    count: pirates.filter(p => p.country === country).length
-  }));
-}
-
-function getYearsOfLife(pirates) {
-  // Simulate large dataset
-  wait(50);
-
-  const years = compact(pirates.map(p => {
-    const match = p.life.match(/(\d{4})s?–(\d{4})s?/);
-
-    return match && {
-      from: parseInt(match[1]),
-      to: parseInt(match[2])
-    };
-  }));
-
-  const minFrom = minBy(years, 'from');
-  const maxTo = maxBy(years, 'to');
-
-  return minFrom && {
-    min: minFrom.from,
-    max: maxTo.to
-  };
-}
+const AppContext = createContext(null);
 
 function App() {
   const [pirates, setPirates] = useFetchPirates([]);
-
   const [selectedPirate, setSelectedPirate] = useState();
   const [selectedCountry, setSelectedCountry] = useState();
-  const [selectedYears, setSelectedYears] = useState([]);
   const [search, setSearch] = useState('');
 
   const countries = getCountries(pirates);
   const years = getYearsOfLife(pirates);
 
-  const handleClick = useCallback((pirateId) => {
+  const chartData = generateChartData(years, pirates, selectedCountry);
+
+  const handleClick = (pirateId) => {
     setSelectedPirate(pirateId);
-  }, []);
+  };
 
   let filteredPirates = pirates;
 
@@ -99,28 +66,34 @@ function App() {
   }
 
   return <>
-    <Header
-      countries={countries}
-      selectedCountry={selectedCountry}
-      onCountryChange={setSelectedCountry}
-      search={search}
-      onSearchChange={setSearch}
-      years={years}
-      onYearsChange={setSelectedYears}
-    />
+    <GlobalStyle/>
 
-    <Main>
-      <List>
-        {filteredPirates.map((pirate, i) => (
-          <ListItem
-            key={pirate.id}
-            onClick={handleClick}
-            {...pirate}
-          />
-        ))}
-      </List>
-      {selectedPirate && <Details {...pirates.find(p => p.id === selectedPirate)}/>}
-    </Main>
+    <AppContext.Provider value={pirates}>
+      <Container>
+        <Header
+          countries={countries}
+          selectedCountry={selectedCountry}
+          onCountryChange={setSelectedCountry}
+          search={search}
+          onSearchChange={setSearch}
+        />
+
+        <Main>
+          <List>
+            {filteredPirates.map((pirate, i) => (
+              <ListItem
+                key={i}
+                onClick={handleClick}
+                {...pirate}
+              />
+            ))}
+          </List>
+          {selectedPirate && <Details {...pirates.find(p => p.id === selectedPirate)}/>}
+        </Main>
+
+        <Chart data={chartData}/>
+      </Container>
+    </AppContext.Provider>
   </>;
 }
 
