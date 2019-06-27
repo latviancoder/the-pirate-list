@@ -41,6 +41,8 @@ export function useFetchPirates(initialState) {
 }
 
 export function getCountries(pirates) {
+  wait(20);
+
   const uniqueCountries = compact(uniq(pirates.map(p => p.country)).sort());
 
   return uniqueCountries.map(country => ({
@@ -68,7 +70,9 @@ export function getYearsOfLife(pirates) {
   };
 }
 
-export function generateChartData(years, pirates, country) {
+export function generateChartData(pirates, country) {
+  const years = getYearsOfLife(pirates);
+
   if (!years) {
     return [];
   }
@@ -103,4 +107,17 @@ export function generateChartData(years, pirates, country) {
       y: e.piratesCount
     }));
   return chartData;
+}
+
+export function filterPirates(pirates, search, selectedCountry) {
+  let filteredPirates = pirates;
+
+  if (search) {
+    filteredPirates = filteredPirates.filter(p => p.name.toLowerCase().includes(search));
+  }
+
+  if (selectedCountry) {
+    filteredPirates = filteredPirates.filter(p => p.country === selectedCountry);
+  }
+  return filteredPirates;
 }

@@ -1,7 +1,8 @@
-import React, { useLayoutEffect, useRef, useState } from 'react';
+import React, { memo, useLayoutEffect, useRef, useState } from 'react';
 import { VictoryBar, VictoryChart } from 'victory';
 
-export default function Chart({ data }) {
+const Chart = memo(({ data }) => {
+  console.log('rerender chart');
   const ref = useRef();
   const [width, setWidth] = useState(0);
 
@@ -18,13 +19,11 @@ export default function Chart({ data }) {
     >
       <VictoryBar
         data={data}
-        // data={[
-        //   { x: new Date(1986, 1, 1), y: 2 },
-        //   { x: new Date(1996, 1, 1), y: 3 },
-        //   { x: new Date(2006, 1, 1), y: 5 },
-        //   { x: new Date(2016, 1, 1), y: 4 }
-        // ]}
       />
     </VictoryChart>
   </div>;
-}
+});
+
+Chart.displayName = 'Chart';
+
+export default Chart;

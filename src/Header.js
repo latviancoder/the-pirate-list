@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { memo, useState } from 'react';
 import Slider, { Handle, Range } from 'rc-slider';
 import styled from 'styled-components';
 
@@ -22,7 +22,7 @@ function handle(props) {
   return <Handle value={value} {...restProps} />;
 }
 
-export default function Header({ countries, search, onSearchChange, onCountryChange, selectedCountry }) {
+const Header = memo(({ countries, search, onSearchChange, onCountryChange, selectedCountry }) => {
   return <Container>
     <input
       type="text"
@@ -46,4 +46,8 @@ export default function Header({ countries, search, onSearchChange, onCountryCha
     {/*  onAfterChange={onYearsChange}*/}
     {/*/>}*/}
   </Container>;
-}
+});
+
+Header.displayName = 'Header';
+
+export default Header;

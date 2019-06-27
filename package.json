@@ -10,10 +10,11 @@
     "js-range": "^1.0.0",
     "lodash": "^4.17.11",
     "rc-slider": "^8.6.13",
-    "react": "^16.8.6",
-    "react-dom": "^16.8.6",
+    "react": "^16.8",
+    "react-dom": "^16.8",
+    "react-is": "^16.8",
     "react-scripts": "3.0.1",
-    "styled-components": "^4.3.1",
+    "styled-components": "^5.0.0-alpha.2",
     "victory": "^32.3.0"
   },
   "scripts": {

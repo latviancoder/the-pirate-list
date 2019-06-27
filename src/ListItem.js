@@ -6,11 +6,13 @@ const Container = styled.div`
   align-items: center;
 `;
 
-const ListItem = memo(({ id, name, onClick, onDelete }) => {
-  return <Container>
-    <div onClick={() => onClick(id)}>{name}</div>
-    {/*<div onClick={() => onDelete(id)}>[del]</div>*/}
-  </Container>;
-});
+// ListItem
+const ListItem = memo(({ id, name, onClick }) => (
+  <Container onClick={() => onClick(id)}>
+    {name}
+  </Container>
+));
+
+ListItem.displayName = 'ListItem';
 
 export default ListItem;
