@@ -41,6 +41,7 @@ export function useFetchPirates(initialState) {
 }
 
 export function getCountries(pirates) {
+  // Simulate large dataset
   wait(20);
 
   const uniqueCountries = compact(uniq(pirates.map(p => p.country)).sort());

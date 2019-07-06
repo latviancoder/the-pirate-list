@@ -32,21 +32,51 @@ const Container = styled.div`
   margin: 0 auto;
 `;
 
-const AppContext = createContext(null);
-
-// App
-const App = () => {
+function App() {
+  console.time('custom hook');
   const [pirates] = useFetchPirates([]);
+  console.timeEnd('custom hook');
+
+  console.time('multiple hooks');
   const [selectedPirate, setSelectedPirate] = useState();
+  const [selectedCountry, setSelectedCountry] = useState();
+  const [search, setSearch] = useState('');
+  console.timeEnd('multiple hooks');
 
-  const handleClick = (pirateId) => {
-    setSelectedPirate(pirateId);
-  };
+  console.time('chart data');
+  const chartData = useMemo(
+    () => generateChartData(pirates, selectedCountry),
+    [pirates, selectedCountry]
+  );
+  console.timeEnd('chart data');
 
-  return <List
-    pirates={pirates}
-    onClick={handleClick}
-  />;
-};
+  console.time('countries');
+  const countries = getCountries(pirates);
+  console.timeEnd('countries');
+
+  return <>
+    <GlobalStyle/>
+
+    <Container>
+      <Header
+        countries={countries}
+        selectedCountry={selectedCountry}
+        onCountryChange={setSelectedCountry}
+        search={search}
+        onSearchChange={setSearch}
+      />
+
+      <Main>
+        <List
+          pirates={pirates}
+          onClick={setSelectedPirate}
+        />
+        {selectedPirate && <Details {...pirates.find(p => p.id === selectedPirate)}/>}
+      </Main>
+
+      <Chart data={chartData}/>
+    </Container>
+  </>;
+}
 
 export default App;
