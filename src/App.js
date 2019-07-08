@@ -33,26 +33,15 @@ const Container = styled.div`
 `;
 
 function App() {
-  console.time('custom hook');
   const [pirates] = useFetchPirates([]);
-  console.timeEnd('custom hook');
 
-  console.time('multiple hooks');
   const [selectedPirate, setSelectedPirate] = useState();
   const [selectedCountry, setSelectedCountry] = useState();
   const [search, setSearch] = useState('');
-  console.timeEnd('multiple hooks');
 
-  console.time('chart data');
-  const chartData = useMemo(
-    () => generateChartData(pirates, selectedCountry),
-    [pirates, selectedCountry]
-  );
-  console.timeEnd('chart data');
-
-  console.time('countries');
+  const chartData = generateChartData(pirates, selectedCountry);
   const countries = getCountries(pirates);
-  console.timeEnd('countries');
+  const filteredPirates = filterPirates(pirates, search, selectedCountry);
 
   return <>
     <GlobalStyle/>
@@ -68,7 +57,7 @@ function App() {
 
       <Main>
         <List
-          pirates={pirates}
+          pirates={filteredPirates}
           onClick={setSelectedPirate}
         />
         {selectedPirate && <Details {...pirates.find(p => p.id === selectedPirate)}/>}

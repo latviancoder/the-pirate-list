@@ -7,11 +7,11 @@ const Container = styled.div`
 `;
 
 // ListItem
-const ListItem = memo(({ id, name, onClick }) => (
+const ListItem = ({ id, name, onClick }) => (
   <Container onClick={() => onClick(id)}>
     {name}
   </Container>
-));
+);
 
 ListItem.displayName = 'ListItem';
 
