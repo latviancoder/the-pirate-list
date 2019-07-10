@@ -1,22 +1,18 @@
-import ListItem from './ListItem';
-import React from 'react';
-import styled from 'styled-components';
-import { Box } from './stuff';
+import React, { useMemo } from 'react';
+import { FixedSizeList as VirtualisedList } from 'react-window';
 
-const StyledList = styled(Box)`
-  flex: 1;
-  height: 60vh;
-  overflow-y: scroll;
-`;
+import ListItem from './ListItem';
 
 export default function List({ pirates, onClick }) {
-  return <StyledList>
-    {pirates.map((pirate, i) => (
-      <ListItem
-        key={i}
-        onClick={onClick}
-        {...pirate}
-      />
-    ))}
-  </StyledList>;
+  const itemData = useMemo(() => ({ pirates, onClick }), [pirates, onClick]);
+
+  return <VirtualisedList
+    height={500}
+    itemData={itemData}
+    itemCount={pirates.length}
+    itemSize={28}
+    width="100%"
+  >
+    {ListItem}
+  </VirtualisedList>;
 }

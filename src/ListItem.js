@@ -1,5 +1,6 @@
 import React, { memo } from 'react';
 import styled from 'styled-components';
+import { areEqual } from 'react-window';
 
 const Container = styled.div`
   display: flex;
@@ -7,11 +8,16 @@ const Container = styled.div`
 `;
 
 // ListItem
-const ListItem = memo(({ id, name, onClick }) => (
-  <Container onClick={() => onClick(id)}>
-    {name}
-  </Container>
-));
+const ListItem = memo(({ index, style, data }) => {
+  const pirate = data.pirates[index];
+
+  return <Container
+    style={style}
+    onClick={() => data.onClick(pirate.id)}
+  >
+    {pirate.name}
+  </Container>;
+}, areEqual);
 
 ListItem.displayName = 'ListItem';
 
