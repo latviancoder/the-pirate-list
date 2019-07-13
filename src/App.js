@@ -1,11 +1,12 @@
-import React, { createContext, useMemo, useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import styled, { createGlobalStyle } from 'styled-components';
 
 import Header from './Header';
-import { filterPirates, generateChartData, getCountries, getYearsOfLife, useFetchPirates } from './stuff';
+import { filterPirates, generateChartData, getCountries, useFetchPirates } from './stuff';
 import Details from './Details';
 import Chart from './Chart';
-import List from './List';
+import ListItem from './ListItem';
+import { FixedSizeList as VirtualisedList } from 'react-window';
 
 const GlobalStyle = createGlobalStyle`
   body {
@@ -47,6 +48,11 @@ function App() {
   const countries = useMemo(() => getCountries(pirates), [pirates]);
   const filteredPirates = filterPirates(pirates, search, selectedCountry);
 
+  const itemData = useMemo(
+    () => ({ pirates: filteredPirates, onClick: setSelectedPirate }),
+    [filteredPirates, setSelectedPirate]
+  );
+
   return <>
     <GlobalStyle/>
 
@@ -60,10 +66,15 @@ function App() {
       />
 
       <Main>
-        <List
-          pirates={filteredPirates}
-          onClick={setSelectedPirate}
-        />
+        <VirtualisedList
+          height={500}
+          itemSize={28}
+          width={'100%'}
+          itemData={itemData}
+          itemCount={filteredPirates.length}
+        >
+          {ListItem}
+        </VirtualisedList>
         {selectedPirate && <Details {...pirates.find(p => p.id === selectedPirate)}/>}
       </Main>
 
