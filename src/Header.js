@@ -1,6 +1,9 @@
 import React, { memo, useState } from 'react';
-import Slider, { Handle, Range } from 'rc-slider';
 import styled from 'styled-components';
+import {
+  unstable_IdlePriority,
+  unstable_scheduleCallback
+} from 'scheduler';
 
 import 'rc-slider/assets/index.css';
 
@@ -17,17 +20,20 @@ const Container = styled.div`
   }
 `;
 
-function handle(props) {
-  const { value, dragging, index, ...restProps } = props;
-  return <Handle value={value} {...restProps} />;
-}
+const Header = memo(({ countries, onSearchChange, onCountryChange, selectedCountry }) => {
+  const [search, setSearch] = useState('');
 
-const Header = memo(({ countries, search, onSearchChange, onCountryChange, selectedCountry }) => {
   return <Container>
     <input
       type="text"
       value={search}
-      onChange={e => onSearchChange(e.target.value)}
+      onChange={e => {
+        const val = e.target.value;
+        setSearch(val);
+        unstable_scheduleCallback(unstable_IdlePriority, () => {
+          onSearchChange(val);
+        });
+      }}
     />
 
     <select onChange={(e) => onCountryChange(e.target.value)} value={selectedCountry}>

@@ -1,13 +1,16 @@
-import React, { memo, useLayoutEffect, useRef, useState } from 'react';
+import React from 'react';
 import { VictoryBar, VictoryChart } from 'victory';
+import { generateChartData } from './stuff';
 
-const Chart = ({ data }) => (
-  <VictoryChart>
+const Chart = ({ pirates, selectedCountry }) => {
+  const data = generateChartData(pirates, selectedCountry);
+
+  return <VictoryChart>
     <VictoryBar
       data={data}
     />
-  </VictoryChart>
-);
+  </VictoryChart>;
+};
 
 Chart.displayName = 'Chart';
 

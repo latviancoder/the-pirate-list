@@ -1,8 +1,8 @@
-import React, { createContext, useMemo, useState } from 'react';
+import React, { useState } from 'react';
 import styled, { createGlobalStyle } from 'styled-components';
 
 import Header from './Header';
-import { filterPirates, generateChartData, getCountries, getYearsOfLife, useFetchPirates } from './stuff';
+import { filterPirates, getCountries, useFetchPirates } from './stuff';
 import Details from './Details';
 import Chart from './Chart';
 import List from './List';
@@ -39,7 +39,6 @@ function App() {
   const [selectedCountry, setSelectedCountry] = useState();
   const [search, setSearch] = useState('');
 
-  const chartData = generateChartData(pirates, selectedCountry);
   const countries = getCountries(pirates);
   const filteredPirates = filterPirates(pirates, search, selectedCountry);
 
@@ -51,7 +50,6 @@ function App() {
         countries={countries}
         selectedCountry={selectedCountry}
         onCountryChange={setSelectedCountry}
-        search={search}
         onSearchChange={setSearch}
       />
 
@@ -63,7 +61,7 @@ function App() {
         {selectedPirate && <Details {...pirates.find(p => p.id === selectedPirate)}/>}
       </Main>
 
-      <Chart data={chartData}/>
+      <Chart pirates={pirates} selectedCountry={selectedCountry}/>
     </Container>
   </>;
 }
