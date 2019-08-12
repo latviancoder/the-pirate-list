@@ -5,18 +5,18 @@ import Header from './Header';
 import { filterPirates, generateChartData, getCountries, useFetchPirates } from './stuff';
 import Details from './Details';
 import Chart from './Chart';
-import ListItem from './ListItem';
-import { FixedSizeList as VirtualisedList } from 'react-window';
+import List from './List';
 
 const GlobalStyle = createGlobalStyle`
   body {
     font-family: 'Muli', sans-serif;
     font-size: 22px;
     color: #525f7f; 
-    background-color: #F5F8FC;
+    background-color: #E4E8ED;
   }
   * {
     outline: none;
+    box-sizing: border-box;
   }
 `;
 
@@ -66,15 +66,7 @@ function App() {
       />
 
       <Main>
-        <VirtualisedList
-          height={500}
-          itemSize={28}
-          width={'100%'}
-          itemData={itemData}
-          itemCount={filteredPirates.length}
-        >
-          {ListItem}
-        </VirtualisedList>
+        <List itemData={itemData} itemCount={filteredPirates.length}/>
         {selectedPirate && <Details {...pirates.find(p => p.id === selectedPirate)}/>}
       </Main>
 

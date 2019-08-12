@@ -5,17 +5,28 @@ import { areEqual } from 'react-window';
 const Container = styled.div`
   display: flex;
   align-items: center;
+  height: 60px;
+  justify-content: space-between;
+  background: #F7FAFC;
+  border-bottom: 1px #E4E9EC solid;
+  padding: 0 20px;
+`;
+
+const Link = styled.a`
+  color: #697AD6;
+  cursor: pointer;
 `;
 
 // ListItem
 const ListItem = memo(({ index, style, data }) => {
-  const pirate = data.pirates[index];
+  const {name, active, id} = data.pirates[index];
 
   return <Container
     style={style}
-    onClick={() => data.onClick(pirate.id)}
+    onClick={() => data.onClick(id)}
   >
-    {pirate.name}
+    <Link>{name}</Link>
+    {active}
   </Container>;
 }, areEqual);
 

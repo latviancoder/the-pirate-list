@@ -5,8 +5,8 @@ import parse from 'csv-parse/lib/sync';
 import range from 'js-range';
 
 export const Box = styled.div`
-  background:#fff;
-  box-shadow: 0 0 5px rgba(0,0,0,.2);
+  background: #fff;
+  box-shadow: 1px 1px 5px rgba(0,0,0,.15);
   padding: 15px;
   border-radius: 4px;
 `;
