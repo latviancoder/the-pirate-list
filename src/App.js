@@ -12,10 +12,11 @@ const GlobalStyle = createGlobalStyle`
     font-family: 'Muli', sans-serif;
     font-size: 22px;
     color: #525f7f; 
-    background-color: #F5F8FC;
+    background-color: #E4E8ED;
   }
   * {
     outline: none;
+    box-sizing: border-box;
   }
 `;
 
@@ -39,12 +40,8 @@ function App() {
   const [selectedCountry, setSelectedCountry] = useState();
   const [search, setSearch] = useState('');
 
-  const chartData = useMemo(
-    () => generateChartData(pirates, selectedCountry),
-    [pirates, selectedCountry]
-  );
-
-  const countries = useMemo(() => getCountries(pirates), [pirates]);
+  const chartData = generateChartData(pirates, selectedCountry);
+  const countries = getCountries(pirates);
   const filteredPirates = filterPirates(pirates, search, selectedCountry);
 
   return <>
