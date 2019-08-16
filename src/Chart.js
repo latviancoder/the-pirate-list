@@ -1,8 +1,8 @@
-import React from 'react';
+import React, { memo } from 'react';
 import { VictoryBar, VictoryLine, VictoryChart, VictoryTheme, VictoryAxis } from 'victory';
 import { Box } from './stuff';
 
-const Chart = ({ data }) => (
+const Chart = memo(({ data }) => (
   <Box style={{ marginTop: '30px', paddingBottom: 0 }}>
     <VictoryChart
       theme={VictoryTheme.material}
@@ -41,7 +41,7 @@ const Chart = ({ data }) => (
       />
     </VictoryChart>
   </Box>
-);
+));
 
 Chart.displayName = 'Chart';
 
