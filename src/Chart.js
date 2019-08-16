@@ -1,5 +1,5 @@
 import React, { memo } from 'react';
-import { VictoryBar, VictoryLine, VictoryChart, VictoryTheme, VictoryAxis } from 'victory';
+import { VictoryLine, VictoryChart, VictoryTheme, VictoryAxis } from 'victory';
 import { Box } from './stuff';
 
 const Chart = memo(({ data }) => (
