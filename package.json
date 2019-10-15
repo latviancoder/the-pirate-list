@@ -6,7 +6,7 @@
     "@types/react": "^16.8.20",
     "@types/styled-components": "^4.1.16",
     "@types/victory": "^31.0.19",
-    "csv-parse": "^4.4.3",
+    "csv-parse": "^4.4.6",
     "js-range": "^1.0.0",
     "lodash": "^4.17.11",
     "rc-slider": "^8.6.13",
