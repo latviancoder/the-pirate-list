@@ -8,7 +8,7 @@
     "@types/victory": "^31.0.19",
     "csv-parse": "^4.4.3",
     "js-range": "^1.0.0",
-    "lodash": "^4.17.11",
+    "lodash": "^4.17.21",
     "rc-slider": "^8.6.13",
     "react": "^16.8",
     "react-dom": "^16.8",
